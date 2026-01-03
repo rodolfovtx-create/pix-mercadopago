@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagar com Pix</title>
+
+  <!-- Biblioteca para gerar QR Code -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    #qrcode {
+      margin: 20px auto;
+    }
+
+    button {
+      background: #00c853;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Pagamento Pix</h2>
+  <p>Valor: <strong>R$ 4,50</strong></p>
+
+  <div id="qrcode"></div>
+
+  <p id="status">Gerando Pix...</p>
+</div>
+
+<script>
+  fetch("/.netlify/functions/criar-pix")
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("status").innerText = "Escaneie o QR Code";
+
+      new QRCode(document.getElementById("qrcode"), {
+        text: data.copiaecola,
+        width: 220,
+        height: 220
+      });
+    })
+    .catch(() => {
+      document.getElementById("status").innerText = "Erro ao gerar Pix";
+    });
+</script>
+
+</body>
+</html>
